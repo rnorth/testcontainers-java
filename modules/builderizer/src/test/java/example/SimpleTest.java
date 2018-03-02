@@ -14,6 +14,11 @@ public class SimpleTest {
             .withFoo("foo")
             .build();
 
+        final Parent parent = ParentBuilder.newBuilder()
+            .withFoo("foo")
+            .build();
+
         System.err.println(child);
+        System.err.println(parent);
     }
 }

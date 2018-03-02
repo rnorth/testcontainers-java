@@ -12,7 +12,9 @@ compileJava {
     options.compilerArgs << "$projectDir/src/main/generated/java"
 
     doFirst {
-        file(new File(projectDir, "/src/main/generated/java")).mkdirs()
+        def dir = file(new File(projectDir, "/src/main/generated/java"))
+        dir.deleteDir()
+        dir.mkdirs()
     }
 }
 
@@ -21,7 +23,9 @@ compileTestJava {
     options.compilerArgs << "$projectDir/src/test/generated/java"
 
     doFirst {
-        file(new File(projectDir, "/src/test/generated/java")).mkdirs()
+        def dir = file(new File(projectDir, "/src/test/generated/java"))
+        dir.deleteDir()
+        dir.mkdirs()
     }
 }
 

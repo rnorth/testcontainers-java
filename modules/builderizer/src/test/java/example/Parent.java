@@ -8,5 +8,12 @@ import org.testcontainers.containercore.builderizer.Buildable;
 @Buildable
 public abstract class Parent {
     protected String foo;
+
+    @Override
+    public String toString() {
+        return "Parent{" +
+            "foo='" + foo + '\'' +
+            '}';
+    }
 }
 
