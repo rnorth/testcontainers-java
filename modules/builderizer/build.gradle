@@ -1,0 +1,39 @@
+description = "Container Core :: Builderizer"
+
+dependencies {
+    compile "com.squareup:javapoet:1.8.0"
+
+    testCompile "junit:junit:4.12"
+}
+
+
+compileJava {
+    options.compilerArgs << "-s"
+    options.compilerArgs << "$projectDir/src/main/generated/java"
+
+    doFirst {
+        file(new File(projectDir, "/src/main/generated/java")).mkdirs()
+    }
+}
+
+compileTestJava {
+    options.compilerArgs << "-s"
+    options.compilerArgs << "$projectDir/src/test/generated/java"
+
+    doFirst {
+        file(new File(projectDir, "/src/test/generated/java")).mkdirs()
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "$projectDir/src/main/generated/java"
+        }
+    }
+    test {
+        java {
+            srcDir "$projectDir/src/test/generated/java"
+        }
+    }
+}

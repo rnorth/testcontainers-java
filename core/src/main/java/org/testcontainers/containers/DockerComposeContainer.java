@@ -12,12 +12,18 @@ import org.apache.commons.lang.SystemUtils;
 import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.profiler.Profiler;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.output.OutputFrame;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.containers.startupcheck.IndefiniteWaitOneShotStartupCheckStrategy;
-import org.testcontainers.utility.*;
+import org.testcontainers.utility.AuditLogger;
+import org.testcontainers.utility.Base58;
+import org.testcontainers.utility.CommandLine;
+import org.testcontainers.utility.DockerLoggerFactory;
+import org.testcontainers.utility.LogUtils;
+import org.testcontainers.utility.MountableFile;
+import org.testcontainers.utility.ResourceReaper;
+import org.testcontainers.utility.TestcontainersConfiguration;
 import org.zeroturnaround.exec.InvalidExitValueException;
 import org.zeroturnaround.exec.ProcessExecutor;
 import org.zeroturnaround.exec.stream.slf4j.Slf4jStream;
@@ -26,8 +32,13 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -101,10 +112,6 @@ public class DockerComposeContainer<SELF extends DockerComposeContainer<SELF>> e
     @Override
     @VisibleForTesting
     public void starting(Description description) {
-        final Profiler profiler = new Profiler("Docker Compose container rule");
-        profiler.setLogger(logger());
-        profiler.start("Docker Compose container startup");
-
         synchronized (MUTEX) {
             registerContainersForShutdown();
             if (pull) {
@@ -115,7 +122,7 @@ public class DockerComposeContainer<SELF extends DockerComposeContainer<SELF>> e
             if (tailChildContainers) {
                 tailChildContainerLogs();
             }
-            startAmbassadorContainers(profiler);
+            startAmbassadorContainers();
         }
     }
 
@@ -180,10 +187,8 @@ public class DockerComposeContainer<SELF extends DockerComposeContainer<SELF>> e
                 .collect(toList());
     }
 
-    private void startAmbassadorContainers(Profiler profiler) {
-        profiler.start("Ambassador container startup");
+    private void startAmbassadorContainers() {
         ambassadorContainer.start();
-        profiler.stop().log();
     }
 
     private Logger logger() {

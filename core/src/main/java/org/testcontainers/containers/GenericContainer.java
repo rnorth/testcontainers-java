@@ -18,7 +18,6 @@ import org.rnorth.ducttape.ratelimits.RateLimiter;
 import org.rnorth.ducttape.ratelimits.RateLimiterBuilder;
 import org.rnorth.ducttape.unreliables.Unreliables;
 import org.slf4j.Logger;
-import org.slf4j.profiler.Profiler;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.output.FrameConsumerResultCallback;
 import org.testcontainers.containers.output.OutputFrame;
@@ -178,11 +177,7 @@ public class GenericContainer<SELF extends GenericContainer<SELF>>
      * Starts the container using docker, pulling an image if necessary.
      */
     public void start() {
-        Profiler profiler = new Profiler("Container startup");
-        profiler.setLogger(logger());
-
         try {
-            profiler.start("Prepare container configuration and host configuration");
             configure();
 
             logger().debug("Starting container: {}", getDockerImageName());
@@ -191,31 +186,27 @@ public class GenericContainer<SELF extends GenericContainer<SELF>>
             AtomicInteger attempt = new AtomicInteger(0);
             Unreliables.retryUntilSuccess(startupAttempts, () -> {
                 logger().debug("Trying to start container: {} (attempt {}/{})", image.get(), attempt.incrementAndGet(), startupAttempts);
-                tryStart(profiler.startNested("Container startup attempt"));
+                tryStart();
                 return true;
             });
 
         } catch (Exception e) {
             throw new ContainerLaunchException("Container startup failed", e);
-        } finally {
-            profiler.stop().log();
         }
     }
 
-    private void tryStart(Profiler profiler) {
+    private void tryStart() {
         try {
             String dockerImageName = image.get();
             logger().debug("Starting container: {}", dockerImageName);
 
             logger().info("Creating container for image: {}", dockerImageName);
-            profiler.start("Create container");
             CreateContainerCmd createCommand = dockerClient.createContainerCmd(dockerImageName);
             applyConfiguration(createCommand);
 
             containerId = createCommand.exec().getId();
 
             logger().info("Starting container with ID: {}", containerId);
-            profiler.start("Start container");
             dockerClient.startContainerCmd(containerId).exec();
 
             // For all registered output consumers, start following as close to container startup as possible
@@ -224,22 +215,17 @@ public class GenericContainer<SELF extends GenericContainer<SELF>>
             logger().info("Container {} is starting: {}", dockerImageName, containerId);
 
             // Tell subclasses that we're starting
-            profiler.start("Inspecting container");
             containerInfo = dockerClient.inspectContainerCmd(containerId).exec();
             containerName = containerInfo.getName();
-            profiler.start("Call containerIsStarting on subclasses");
             containerIsStarting(containerInfo);
 
             // Wait until the container is running (may not be fully started)
-            profiler.start("Wait until container has started properly, or there's evidence it failed to start.");
-
             if (!this.startupCheckStrategy.waitUntilStartupSuccessful(dockerClient, containerId)) {
                 // Bail out, don't wait for the port to start listening.
                 // (Exception thrown here will be caught below and wrapped)
                 throw new IllegalStateException("Container did not start correctly.");
             }
 
-            profiler.start("Wait until container started properly");
             waitUntilContainerStarted();
 
             logger().info("Container {} started", dockerImageName);
@@ -262,8 +248,6 @@ public class GenericContainer<SELF extends GenericContainer<SELF>>
             }
 
             throw new ContainerLaunchException("Could not create/start container", e);
-        } finally {
-            profiler.stop();
         }
     }
 
@@ -1048,7 +1032,7 @@ public class GenericContainer<SELF extends GenericContainer<SELF>>
     }
 
     /**
-     * Allow low level modifications of {@link CreateContainerCmd} after it was pre-configured in {@link #tryStart(Profiler)}.
+     * Allow low level modifications of {@link CreateContainerCmd} after it was pre-configured in {@link #tryStart()}.
      * Invocation happens eagerly on a moment when container is created.
      * Warning: this does expose the underlying docker-java API so might change outside of our control.
      *
