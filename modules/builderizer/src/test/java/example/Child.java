@@ -3,7 +3,7 @@ package example;
 import org.testcontainers.containercore.builderizer.Buildable;
 
 @Buildable
-public abstract class Child extends Parent {
+public abstract class Child extends Parent implements Container {
     protected String bar;
 
     @Override

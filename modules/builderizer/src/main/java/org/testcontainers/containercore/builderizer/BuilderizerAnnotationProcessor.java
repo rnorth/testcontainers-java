@@ -2,11 +2,15 @@ package org.testcontainers.containercore.builderizer;
 
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.TypeVariableName;
 
 import javax.annotation.Generated;
 import javax.annotation.processing.AbstractProcessor;
@@ -168,6 +172,23 @@ public class BuilderizerAnnotationProcessor extends AbstractProcessor {
 
         builderClassBuilder.addMethod(buildMethodBuilder
             .addStatement("return instance")
+            .build());
+
+        final TypeVariableName t = TypeVariableName.get("T", ClassName.get(BuildWrapper.class));
+        final ParameterizedTypeName genericClass = ParameterizedTypeName.get(ClassName.get(Class.class), t);
+        final ClassName wrappable = ClassName.get(Wrappable.class);
+
+        builderClassBuilder.addMethod(MethodSpec.methodBuilder("buildAs")
+            .addTypeVariable(t)
+            .returns(t)
+            .addParameter(ParameterSpec.builder(genericClass, "clazz").build())
+            .addCode(CodeBlock.builder()
+                .beginControlFlow("try")
+                .addStatement("return clazz.getConstructor($T.class).newInstance(this.build())", wrappable)
+                .nextControlFlow("catch ($T e)", Exception.class)
+                .addStatement("throw new $T(e)", RuntimeException.class)
+                .endControlFlow()
+                .build())
             .build());
 
         final JavaFile javaFile = JavaFile.builder(targetClassName.packageName(), builderClassBuilder.build())
