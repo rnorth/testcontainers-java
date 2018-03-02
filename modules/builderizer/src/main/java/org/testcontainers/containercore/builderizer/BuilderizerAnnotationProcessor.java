@@ -140,11 +140,10 @@ public class BuilderizerAnnotationProcessor extends AbstractProcessor {
             .addStatement("return new $T()", builderTypeClassName)
             .build());
 
-        builderClassBuilder.addMethod(MethodSpec.methodBuilder("build")
+        final MethodSpec.Builder buildMethodBuilder = MethodSpec.methodBuilder("build")
             .addModifiers(Modifier.PUBLIC)
             .returns(targetClassName)
-            .addStatement("return new $T()", concreteClassName)
-            .build());
+            .addStatement("$T instance = new $T()", concreteClassName, concreteClassName);
 
         for (VariableElement attribute : fields) {
             final String fieldName = attribute.getSimpleName().toString();
@@ -154,7 +153,7 @@ public class BuilderizerAnnotationProcessor extends AbstractProcessor {
                 fieldName.substring(0, 1).toUpperCase() +
                 fieldName.substring(1);
 
-            builderClassBuilder.addField(FieldSpec.builder(fieldType, fieldName.toString(), Modifier.PRIVATE).build());
+            builderClassBuilder.addField(FieldSpec.builder(fieldType, fieldName, Modifier.PRIVATE).build());
 
             builderClassBuilder.addMethod(MethodSpec.methodBuilder(setterName)
                 .addModifiers(Modifier.PUBLIC)
@@ -163,7 +162,13 @@ public class BuilderizerAnnotationProcessor extends AbstractProcessor {
                 .addStatement("this.$1L = $1L", fieldName)
                 .addStatement("return this")
                 .build());
+
+            buildMethodBuilder.addStatement("instance.$1L = this.$1L", fieldName);
         }
+
+        builderClassBuilder.addMethod(buildMethodBuilder
+            .addStatement("return instance")
+            .build());
 
         final JavaFile javaFile = JavaFile.builder(targetClassName.packageName(), builderClassBuilder.build())
             .build();
