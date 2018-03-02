@@ -82,6 +82,10 @@ public class BuilderizerAnnotationProcessor extends AbstractProcessor {
 
         TypeElement targetClass = (TypeElement) element;
 
+        if (!targetClass.getModifiers().contains(Modifier.ABSTRACT)) {
+            presentError(targetClass, "Should be abstract");
+        }
+
         List<VariableElement> fields = new ArrayList<>(getFieldsOnClassOrSuperclass(targetClass));
 
         final ClassName targetClassName = ClassName.get(targetClass);
