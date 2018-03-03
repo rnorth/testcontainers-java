@@ -1,4 +1,4 @@
-package example;
+package org.testcontainers.containercore.core;
 
 /**
  * TODO: Javadocs

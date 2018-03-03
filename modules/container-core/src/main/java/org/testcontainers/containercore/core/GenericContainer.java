@@ -1,4 +1,4 @@
-package example;
+package org.testcontainers.containercore.core;
 
 import org.testcontainers.containercore.builderprocessor.ContainerBuilderDSL;
 

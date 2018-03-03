@@ -5,6 +5,7 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.MultipleFailureException;
 import org.junit.runners.model.Statement;
+import org.testcontainers.containercore.core.StartStoppable;
 
 import java.util.ArrayList;
 import java.util.List;
