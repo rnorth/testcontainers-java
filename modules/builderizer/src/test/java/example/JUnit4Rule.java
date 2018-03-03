@@ -6,22 +6,26 @@ import org.testcontainers.containercore.builderizer.Wrappable;
 /**
  * TODO: Javadocs
  */
-public class JUnit4Rule implements BuildWrapper {
+public class JUnit4Rule implements BuildWrapper, Container {
 
-    private final Container wrappedContainer;
+    private final Container container;
 
-    public JUnit4Rule(Wrappable wrappedContainer) {
-        this.wrappedContainer = (Container) wrappedContainer;
+    public JUnit4Rule(Wrappable container) {
+        this.container = (Container) container;
     }
 
     @Override
-    public String toString() {
-        return "JUnit4Rule{" +
-            "wrappedContainer=" + wrappedContainer +
-            '}';
+    public void start() {
+        container.start();
     }
 
-    public void doSomeMethod() {
-        wrappedContainer.someMethod();
+    @Override
+    public void stop() {
+container.stop();
+    }
+
+    @Override
+    public void exec(String... cmd) {
+container.exec(cmd);
     }
 }

@@ -1,11 +1,11 @@
 package example;
 
-import org.testcontainers.containercore.builderizer.Wrappable;
-
 /**
  * TODO: Javadocs
  */
-public interface Container extends Wrappable {
+public interface Container {
 
-    void someMethod();
+    void start();
+    void stop();
+    void exec(String... cmd);
 }
