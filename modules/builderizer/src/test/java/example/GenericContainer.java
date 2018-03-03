@@ -1,15 +1,14 @@
 package example;
 
-import org.testcontainers.containercore.builderizer.Buildable;
-import org.testcontainers.containercore.builderizer.Wrappable;
+import org.testcontainers.containercore.builderizer.ContainerBuilderDSL;
 
 import java.util.Arrays;
 
 /**
  * TODO: Javadocs
  */
-@Buildable
-public abstract class GenericContainer implements Wrappable, Container {
+@ContainerBuilderDSL
+public abstract class GenericContainer implements StartStoppable, Container {
     protected String name;
 
     @Override

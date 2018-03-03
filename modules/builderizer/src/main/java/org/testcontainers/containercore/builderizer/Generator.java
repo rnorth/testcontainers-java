@@ -2,15 +2,11 @@ package org.testcontainers.containercore.builderizer;
 
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import com.squareup.javapoet.TypeVariableName;
 
 import javax.annotation.Generated;
 import javax.annotation.processing.Filer;
@@ -53,7 +49,7 @@ public class Generator {
         List<VariableElement> fields = new ArrayList<>(getFieldsOnClassOrSuperclass(targetClass));
 
         final ClassName targetClassName = ClassName.get(targetClass);
-        final ClassName concreteClassName = generateConcreteClass(targetClassName);
+        final ClassName concreteClassName = generateConcreteClass(targetClassName, true, "Concrete");
         generateBuilderClass(targetClassName, concreteClassName, fields);
     }
 
@@ -80,15 +76,19 @@ public class Generator {
         return results;
     }
 
-    private ClassName generateConcreteClass(ClassName targetClass) throws IOException {
-        final String concreteClassNameString = targetClass.simpleName() + "Concrete";
+    private ClassName generateConcreteClass(ClassName targetClass, boolean hidden, String suffix) throws IOException {
+        final String concreteClassNameString = targetClass.simpleName() + suffix;
         final ClassName concreteClassName = ClassName.get(targetClass.packageName(), concreteClassNameString);
 
-        TypeSpec.Builder builderClassBuilder = TypeSpec.classBuilder(concreteClassName)
+        TypeSpec.Builder concreteClassBuilder = TypeSpec.classBuilder(concreteClassName)
             .addAnnotation(generatedAnnotation())
             .superclass(targetClass);
 
-        final TypeSpec concreteClass = builderClassBuilder.build();
+        if (!hidden) {
+            concreteClassBuilder.addModifiers(Modifier.PUBLIC);
+        }
+
+        final TypeSpec concreteClass = concreteClassBuilder.build();
         final JavaFile javaFile = JavaFile.builder(targetClass.packageName(), concreteClass)
             .build();
 
@@ -145,24 +145,6 @@ public class Generator {
 
         builderClassBuilder.addMethod(buildMethodBuilder
             .addStatement("return instance")
-            .build());
-
-        final TypeVariableName t = TypeVariableName.get("T", ClassName.get(BuildWrapper.class));
-        final ParameterizedTypeName genericClass = ParameterizedTypeName.get(ClassName.get(Class.class), t);
-        final ClassName wrappable = ClassName.get(Wrappable.class);
-
-        builderClassBuilder.addMethod(MethodSpec.methodBuilder("buildAs")
-            .addModifiers(Modifier.PUBLIC)
-            .addTypeVariable(t)
-            .returns(t)
-            .addParameter(ParameterSpec.builder(genericClass, "clazz").build())
-            .addCode(CodeBlock.builder()
-                .beginControlFlow("try")
-                .addStatement("return clazz.getConstructor($T.class).newInstance(this.build())", wrappable)
-                .nextControlFlow("catch ($T e)", Exception.class)
-                .addStatement("throw new $T(e)", RuntimeException.class)
-                .endControlFlow()
-                .build())
             .build());
 
         final JavaFile javaFile = JavaFile.builder(targetClassName.packageName(), builderClassBuilder.build())

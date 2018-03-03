@@ -33,7 +33,7 @@ public class BuilderizerAnnotationProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         final Generator generator = new Generator(messager, typeUtils, filer);
-        for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(Buildable.class)) {
+        for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(ContainerBuilderDSL.class)) {
             try {
                 generator.generate(annotatedElement);
             } catch (Exception e) {
@@ -51,7 +51,7 @@ public class BuilderizerAnnotationProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        return Collections.singleton(Buildable.class.getCanonicalName());
+        return Collections.singleton(ContainerBuilderDSL.class.getCanonicalName());
     }
 
     @Override

@@ -1,8 +1,8 @@
 package example;
 
-import org.testcontainers.containercore.builderizer.Buildable;
+import org.testcontainers.containercore.builderizer.ContainerBuilderDSL;
 
-@Buildable
+@ContainerBuilderDSL
 public abstract class KafkaContainer extends GenericContainer {
     protected String kafkaOnlyProperty;
 
