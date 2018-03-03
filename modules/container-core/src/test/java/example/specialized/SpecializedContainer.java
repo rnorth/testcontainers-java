@@ -1,14 +1,11 @@
-package example;
+package example.specialized;
 
 import org.testcontainers.containercore.builderprocessor.ContainerBuilderDSL;
 import org.testcontainers.containercore.core.GenericContainer;
 
 @ContainerBuilderDSL
-public class SpecializedContainer extends GenericContainer {
+public abstract class SpecializedContainer extends GenericContainer {
     protected String specializedOnlyProperty;
-
-    protected SpecializedContainer() {
-    }
 
     @Override
     public String toString() {

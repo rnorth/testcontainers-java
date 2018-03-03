@@ -14,6 +14,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static javax.lang.model.element.Modifier.*;
 
@@ -34,14 +35,45 @@ public class Generator {
         final String packageName = targetClassName.packageName();
         final ClassName builderTypeClassName = ClassName.get(packageName, builderClassName);
 
+        final String concreteClass = targetClassName.simpleName() + "Concrete";
+        final ClassName concreteClassName = ClassName.get(packageName, concreteClass);
+
+        final MethodSpec.Builder concreteClassConstructorBuilder = MethodSpec.constructorBuilder();
+        for (VariableElement field : fields) {
+            final String fieldName = field.getSimpleName().toString();
+            final TypeName fieldType = TypeName.get(field.asType());
+
+            concreteClassConstructorBuilder.addParameter(fieldType, fieldName);
+
+            concreteClassConstructorBuilder.addStatement("this.$1L = $1L", fieldName);
+        }
+
+
+        final TypeSpec concreteClassSpec = TypeSpec.classBuilder(concreteClassName)
+//            .addAnnotation(generatedAnnotation())
+            .superclass(targetClassName)
+            .addMethod(concreteClassConstructorBuilder.build())
+            .build();
+
+        final JavaFile concreteClassFile = JavaFile.builder(packageName, concreteClassSpec)
+            .build();
+
+        concreteClassFile.writeTo(filer);
+
+
         TypeSpec.Builder builderClassBuilder = TypeSpec.classBuilder(builderClassName)
             .addAnnotation(generatedAnnotation())
             .addModifiers(PUBLIC);
 
+        final String fieldNames = fields.stream()
+            .map(VariableElement::getSimpleName)
+            .collect(Collectors.joining(", "));
+
+
         final MethodSpec.Builder buildMethodBuilder = MethodSpec.methodBuilder("build")
             .addModifiers(PUBLIC)
             .returns(targetClassName)
-            .addStatement("$T instance = new $T()", targetClassName, targetClassName);
+            .addStatement("return new $T($L)", concreteClassName, fieldNames);
 
         for (VariableElement field : fields) {
             final String fieldName = field.getSimpleName().toString();
@@ -59,11 +91,11 @@ public class Generator {
                 .addStatement("return this")
                 .build());
 
-            buildMethodBuilder.addStatement("instance.$1L = this.$1L", fieldName);
+//            buildMethodBuilder.addStatement("instance.$1L = this.$1L", fieldName);
         }
 
         builderClassBuilder.addMethod(buildMethodBuilder
-            .addStatement("return instance")
+//            .addStatement("return instance")
             .build());
 
         builderClassBuilder.addMethod(privateConstructor());

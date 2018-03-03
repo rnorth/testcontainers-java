@@ -8,10 +8,8 @@ import java.util.Arrays;
  * TODO: Javadocs
  */
 @ContainerBuilderDSL
-public class GenericContainer implements StartStoppable, Container {
+public abstract class GenericContainer implements StartStoppable, Container {
     protected String name;
-
-    protected GenericContainer() {}
 
     @Override
     public String toString() {

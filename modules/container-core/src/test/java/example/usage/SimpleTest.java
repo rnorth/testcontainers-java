@@ -1,23 +1,21 @@
 package example.usage;
 
-import org.testcontainers.containercore.core.GenericContainer;
-import example.GenericContainerBuilder;
 import example.JUnit4Rule;
-import example.SpecializedContainer;
-import example.KafkaContainerBuilder;
+import example.specialized.SpecializedContainer;
+import example.specialized.SpecializedContainerBuilder;
 import org.junit.Rule;
 import org.junit.Test;
-
-import static example.JUnit4Rule.rule;
+import org.testcontainers.containercore.core.GenericContainer;
+import org.testcontainers.containercore.core.GenericContainerBuilder;
 
 /**
  * TODO: Javadocs
  */
 public class SimpleTest {
 
-    private final SpecializedContainer child = KafkaContainerBuilder.newBuilder()
+    private final SpecializedContainer child = SpecializedContainerBuilder.newBuilder()
         .withName("bar")
-        .withKafkaOnlyProperty("foo")
+        .withSpecializedOnlyProperty("foo")
         .build();
 
     private final GenericContainer parent = GenericContainerBuilder.newBuilder()
@@ -25,7 +23,7 @@ public class SimpleTest {
         .build();
 
     @Rule
-    public JUnit4Rule rule = rule(parent, child);
+    public JUnit4Rule rule = JUnit4Rule.rule(parent, child);
 
 
     @Test
