@@ -36,3 +36,8 @@ file('modules').eachDir { dir ->
     include dir.name
     project(":${dir.name}").projectDir = dir
 }
+
+file('modules/container-core').eachDir { dir ->
+    include dir.name
+    project(":${dir.name}").projectDir = dir
+}

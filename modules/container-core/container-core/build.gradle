@@ -1,0 +1,12 @@
+plugins {
+    id "net.ltgt.apt" version "0.15"
+}
+
+description = "Container Core"
+
+dependencies {
+    compileOnly project(":dsl-processor")
+    annotationProcessor project(":dsl-processor")
+
+    testCompile "junit:junit:4.12"
+}

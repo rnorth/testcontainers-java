@@ -1,4 +1,4 @@
-package example.specialized;
+package org.testcontainers.containercore.core.specialized;
 
 import org.testcontainers.containercore.builderprocessor.ContainerBuilderDSL;
 import org.testcontainers.containercore.core.GenericContainer;

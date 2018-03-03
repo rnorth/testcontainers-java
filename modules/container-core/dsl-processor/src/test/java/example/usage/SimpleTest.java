@@ -1,8 +1,8 @@
 package example.usage;
 
 import example.JUnit4Rule;
-import example.specialized.SpecializedContainer;
-import example.specialized.SpecializedContainerBuilder;
+import org.testcontainers.containercore.core.specialized.SpecializedContainer;
+import org.testcontainers.containercore.core.specialized.SpecializedContainerBuilder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.testcontainers.containercore.core.GenericContainer;
