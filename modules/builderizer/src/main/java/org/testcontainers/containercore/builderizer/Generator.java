@@ -152,6 +152,7 @@ public class Generator {
         final ClassName wrappable = ClassName.get(Wrappable.class);
 
         builderClassBuilder.addMethod(MethodSpec.methodBuilder("buildAs")
+            .addModifiers(Modifier.PUBLIC)
             .addTypeVariable(t)
             .returns(t)
             .addParameter(ParameterSpec.builder(genericClass, "clazz").build())

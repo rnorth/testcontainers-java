@@ -1,5 +1,10 @@
-package example;
+package example.usage;
 
+import example.Child;
+import example.ChildBuilder;
+import example.JUnit4Rule;
+import example.Parent;
+import example.ParentBuilder;
 import org.junit.Test;
 
 /**
