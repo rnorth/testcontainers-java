@@ -10,17 +10,10 @@ import com.squareup.javapoet.TypeSpec;
 
 import javax.annotation.Generated;
 import javax.annotation.processing.Filer;
-import javax.annotation.processing.Messager;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
-import javax.lang.model.util.Types;
-import javax.tools.Diagnostic;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -28,51 +21,14 @@ import java.util.List;
  */
 public class Generator {
 
-    private final Messager messager;
-    private final Types typeUtils;
     private final Filer filer;
 
-    public Generator(Messager messager, Types typeUtils, Filer filer) {
-        this.messager = messager;
-        this.typeUtils = typeUtils;
+    public Generator(Filer filer) {
         this.filer = filer;
     }
 
-    public void generate(Element element) throws IOException {
-
-        TypeElement targetClass = (TypeElement) element;
-
-        List<VariableElement> fields = new ArrayList<>(getFieldsOnClassOrSuperclass(targetClass));
-
-        final ClassName targetClassName = ClassName.get(targetClass);
-        generateBuilderClass(targetClassName, fields);
-    }
-
-    private void presentError(Element element, String message) {
-        messager.printMessage(Diagnostic.Kind.ERROR, message, element);
-    }
-
-    private Collection<? extends VariableElement> getFieldsOnClassOrSuperclass(TypeElement targetClass) {
-        List<VariableElement> results = new ArrayList<>();
-
-        for (Element field : targetClass.getEnclosedElements()) {
-            if (field.getKind() == ElementKind.FIELD &&
-                !field.getModifiers().contains(Modifier.STATIC) &&
-                !field.getModifiers().contains(Modifier.PRIVATE)) {
-                results.add((VariableElement) field);
-            }
-        }
-
-        final TypeElement superClass = ((TypeElement) typeUtils.asElement(targetClass.getSuperclass()));
-        if (!superClass.toString().equals(Object.class.getName())) {
-            results.addAll(getFieldsOnClassOrSuperclass(superClass));
-        }
-
-        return results;
-    }
-
-    private void generateBuilderClass(ClassName targetClassName, List<VariableElement> fields) throws IOException {
-
+    public void generate(TypeElement element, List<VariableElement> fields) throws IOException {
+        final ClassName targetClassName = ClassName.get(element);
         final String builderClassName = targetClassName.simpleName() + "Builder";
         final ClassName builderTypeClassName = ClassName.get(targetClassName.packageName(), builderClassName);
 

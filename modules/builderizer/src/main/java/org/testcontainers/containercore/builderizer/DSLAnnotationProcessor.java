@@ -8,9 +8,11 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -32,10 +34,12 @@ public class DSLAnnotationProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        final Generator generator = new Generator(messager, typeUtils, filer);
+        final Generator generator = new Generator(filer);
+        final FieldInspector fieldInspector = new FieldInspector(typeUtils);
         for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(ContainerBuilderDSL.class)) {
             try {
-                generator.generate(annotatedElement);
+                final List<VariableElement> fields = fieldInspector.getFieldsOnClassOrSuperclass((TypeElement) annotatedElement);
+                generator.generate(annotatedElement, fields);
             } catch (Exception e) {
                 presentError(annotatedElement, e.getMessage());
                 return true;
