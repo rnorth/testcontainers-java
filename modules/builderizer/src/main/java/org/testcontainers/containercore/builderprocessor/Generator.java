@@ -1,4 +1,4 @@
-package org.testcontainers.containercore.builderizer;
+package org.testcontainers.containercore.builderprocessor;
 
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;

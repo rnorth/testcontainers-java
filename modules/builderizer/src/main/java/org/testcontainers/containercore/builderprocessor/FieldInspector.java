@@ -1,4 +1,4 @@
-package org.testcontainers.containercore.builderizer;
+package org.testcontainers.containercore.builderprocessor;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;

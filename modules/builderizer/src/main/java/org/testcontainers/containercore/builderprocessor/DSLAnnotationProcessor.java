@@ -1,4 +1,4 @@
-package org.testcontainers.containercore.builderizer;
+package org.testcontainers.containercore.builderprocessor;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;

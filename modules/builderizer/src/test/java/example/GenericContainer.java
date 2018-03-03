@@ -1,6 +1,6 @@
 package example;
 
-import org.testcontainers.containercore.builderizer.ContainerBuilderDSL;
+import org.testcontainers.containercore.builderprocessor.ContainerBuilderDSL;
 
 import java.util.Arrays;
 

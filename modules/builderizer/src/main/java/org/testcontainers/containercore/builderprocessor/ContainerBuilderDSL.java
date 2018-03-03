@@ -1,4 +1,4 @@
-package org.testcontainers.containercore.builderizer;
+package org.testcontainers.containercore.builderprocessor;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
