@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  * TODO: Javadocs
  */
-public class BuilderizerAnnotationProcessor extends AbstractProcessor {
+public class DSLAnnotationProcessor extends AbstractProcessor {
 
     private Messager messager;
     private Types typeUtils;

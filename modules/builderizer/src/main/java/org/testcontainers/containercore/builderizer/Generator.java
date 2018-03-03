@@ -42,15 +42,10 @@ public class Generator {
 
         TypeElement targetClass = (TypeElement) element;
 
-        if (!targetClass.getModifiers().contains(Modifier.ABSTRACT)) {
-            presentError(targetClass, "Should be abstract");
-        }
-
         List<VariableElement> fields = new ArrayList<>(getFieldsOnClassOrSuperclass(targetClass));
 
         final ClassName targetClassName = ClassName.get(targetClass);
-        final ClassName concreteClassName = generateConcreteClass(targetClassName, true, "Concrete");
-        generateBuilderClass(targetClassName, concreteClassName, fields);
+        generateBuilderClass(targetClassName, fields);
     }
 
     private void presentError(Element element, String message) {
@@ -76,29 +71,7 @@ public class Generator {
         return results;
     }
 
-    private ClassName generateConcreteClass(ClassName targetClass, boolean hidden, String suffix) throws IOException {
-        final String concreteClassNameString = targetClass.simpleName() + suffix;
-        final ClassName concreteClassName = ClassName.get(targetClass.packageName(), concreteClassNameString);
-
-        TypeSpec.Builder concreteClassBuilder = TypeSpec.classBuilder(concreteClassName)
-            .addAnnotation(generatedAnnotation())
-            .superclass(targetClass);
-
-        if (!hidden) {
-            concreteClassBuilder.addModifiers(Modifier.PUBLIC);
-        }
-
-        final TypeSpec concreteClass = concreteClassBuilder.build();
-        final JavaFile javaFile = JavaFile.builder(targetClass.packageName(), concreteClass)
-            .build();
-
-        javaFile.writeTo(filer);
-
-        return concreteClassName;
-    }
-
-    private void generateBuilderClass(ClassName targetClassName, ClassName
-        concreteClassName, List<VariableElement> fields) throws IOException {
+    private void generateBuilderClass(ClassName targetClassName, List<VariableElement> fields) throws IOException {
 
         final String builderClassName = targetClassName.simpleName() + "Builder";
         final ClassName builderTypeClassName = ClassName.get(targetClassName.packageName(), builderClassName);
@@ -120,7 +93,7 @@ public class Generator {
         final MethodSpec.Builder buildMethodBuilder = MethodSpec.methodBuilder("build")
             .addModifiers(Modifier.PUBLIC)
             .returns(targetClassName)
-            .addStatement("$T instance = new $T()", concreteClassName, concreteClassName);
+            .addStatement("$T instance = new $T()", targetClassName, targetClassName);
 
         for (VariableElement attribute : fields) {
             final String fieldName = attribute.getSimpleName().toString();

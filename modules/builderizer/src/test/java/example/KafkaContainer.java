@@ -3,8 +3,11 @@ package example;
 import org.testcontainers.containercore.builderizer.ContainerBuilderDSL;
 
 @ContainerBuilderDSL
-public abstract class KafkaContainer extends GenericContainer {
+public class KafkaContainer extends GenericContainer {
     protected String kafkaOnlyProperty;
+
+    protected KafkaContainer() {
+    }
 
     @Override
     public String toString() {
