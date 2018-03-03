@@ -10,11 +10,12 @@ import com.squareup.javapoet.TypeSpec;
 
 import javax.annotation.Generated;
 import javax.annotation.processing.Filer;
-import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import java.io.IOException;
 import java.util.List;
+
+import static javax.lang.model.element.Modifier.*;
 
 /**
  * TODO: Javadocs
@@ -30,39 +31,28 @@ public class Generator {
     public void generate(TypeElement element, List<VariableElement> fields) throws IOException {
         final ClassName targetClassName = ClassName.get(element);
         final String builderClassName = targetClassName.simpleName() + "Builder";
-        final ClassName builderTypeClassName = ClassName.get(targetClassName.packageName(), builderClassName);
+        final String packageName = targetClassName.packageName();
+        final ClassName builderTypeClassName = ClassName.get(packageName, builderClassName);
 
         TypeSpec.Builder builderClassBuilder = TypeSpec.classBuilder(builderClassName)
             .addAnnotation(generatedAnnotation())
-            .addModifiers(Modifier.PUBLIC);
-
-        builderClassBuilder.addMethod(MethodSpec.constructorBuilder()
-            .addModifiers(Modifier.PRIVATE)
-            .build());
-
-        builderClassBuilder.addMethod(MethodSpec.methodBuilder("newBuilder")
-            .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-            .returns(builderTypeClassName)
-            .addStatement("return new $T()", builderTypeClassName)
-            .build());
+            .addModifiers(PUBLIC);
 
         final MethodSpec.Builder buildMethodBuilder = MethodSpec.methodBuilder("build")
-            .addModifiers(Modifier.PUBLIC)
+            .addModifiers(PUBLIC)
             .returns(targetClassName)
             .addStatement("$T instance = new $T()", targetClassName, targetClassName);
 
-        for (VariableElement attribute : fields) {
-            final String fieldName = attribute.getSimpleName().toString();
-            final TypeName fieldType = TypeName.get(attribute.asType());
+        for (VariableElement field : fields) {
+            final String fieldName = field.getSimpleName().toString();
+            final TypeName fieldType = TypeName.get(field.asType());
 
-            final String setterName = "with" +
-                fieldName.substring(0, 1).toUpperCase() +
-                fieldName.substring(1);
+            builderClassBuilder.addField(FieldSpec.builder(fieldType, fieldName, PRIVATE).build());
 
-            builderClassBuilder.addField(FieldSpec.builder(fieldType, fieldName, Modifier.PRIVATE).build());
+            final String setterName = setterName(fieldName);
 
             builderClassBuilder.addMethod(MethodSpec.methodBuilder(setterName)
-                .addModifiers(Modifier.PUBLIC)
+                .addModifiers(PUBLIC)
                 .returns(builderTypeClassName)
                 .addParameter(fieldType, fieldName)
                 .addStatement("this.$1L = $1L", fieldName)
@@ -76,10 +66,33 @@ public class Generator {
             .addStatement("return instance")
             .build());
 
-        final JavaFile javaFile = JavaFile.builder(targetClassName.packageName(), builderClassBuilder.build())
+        builderClassBuilder.addMethod(privateConstructor());
+        builderClassBuilder.addMethod(builderStaticFactoryMethod(builderTypeClassName));
+
+        final JavaFile javaFile = JavaFile.builder(packageName, builderClassBuilder.build())
             .build();
 
         javaFile.writeTo(filer);
+    }
+
+    private String setterName(String fieldName) {
+        return "with" +
+            fieldName.substring(0, 1).toUpperCase() +
+            fieldName.substring(1);
+    }
+
+    private MethodSpec privateConstructor() {
+        return MethodSpec.constructorBuilder()
+            .addModifiers(PRIVATE)
+            .build();
+    }
+
+    private MethodSpec builderStaticFactoryMethod(ClassName builderTypeClassName) {
+        return MethodSpec.methodBuilder("newBuilder")
+            .addModifiers(PUBLIC, STATIC)
+            .returns(builderTypeClassName)
+            .addStatement("return new $T()", builderTypeClassName)
+            .build();
     }
 
     private AnnotationSpec generatedAnnotation() {

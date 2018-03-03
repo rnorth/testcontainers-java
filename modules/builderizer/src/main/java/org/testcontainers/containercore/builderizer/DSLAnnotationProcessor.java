@@ -7,6 +7,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Types;
@@ -36,12 +37,19 @@ public class DSLAnnotationProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         final Generator generator = new Generator(filer);
         final FieldInspector fieldInspector = new FieldInspector(typeUtils);
-        for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(ContainerBuilderDSL.class)) {
+        for (Element element : roundEnv.getElementsAnnotatedWith(ContainerBuilderDSL.class)) {
+            if (element.getKind() != ElementKind.CLASS) {
+                presentError(element, ContainerBuilderDSL.class.getSimpleName() + " may only be used on classes");
+                return true;
+            }
+
+            final TypeElement typeElement = (TypeElement) element;
+
             try {
-                final List<VariableElement> fields = fieldInspector.getFieldsOnClassOrSuperclass((TypeElement) annotatedElement);
-                generator.generate(annotatedElement, fields);
+                final List<VariableElement> fields = fieldInspector.getFieldsOnClassOrSuperclass(typeElement);
+                generator.generate(typeElement, fields);
             } catch (Exception e) {
-                presentError(annotatedElement, e.getMessage());
+                presentError(element, e.getMessage());
                 return true;
             }
         }
