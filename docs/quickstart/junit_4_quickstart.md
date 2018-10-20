@@ -8,8 +8,8 @@ You can see the implementation code and the corresponding test before we've adde
 
 !!! example "Scenario code"
     <!--codeinclude-->
-    [Implementation](example/src/main/java/quickstart/RedisBackedCache.java) block:RedisBackedCache
-    [Pre-Testcontainers test code](example/src/test/java/quickstart/RedisBackedCacheIntTestStep0.java) block:RedisBackedCacheIntTestStep0
+    [Implementation](../example/src/main/java/quickstart/RedisBackedCache.java) block:RedisBackedCache
+    [Pre-Testcontainers test code](../example/src/test/java/quickstart/RedisBackedCacheIntTestStep0.java) block:RedisBackedCacheIntTestStep0
     <!--/codeinclude-->
 
 Notice that the existing test has a problem - it's relying on a local installation of Redis, which is a red flag for test reliability.
@@ -23,8 +23,8 @@ Let's start from here, and see how to improve the test with Testcontainers:
 First, add Testcontainers as a dependency as follows:
 
 <!--codeinclude-->
-[Gradle](example/quickstart.gradle) block:dependencies
-[Maven](example/pom.xml) lines:3-10
+[Gradle](../example/quickstart.gradle) block:dependencies
+[Maven](../example/pom.xml) lines:3-10
 <!--/codeinclude-->
 
 ## 2. Get Testcontainers to run a Redis container during our tests
@@ -32,7 +32,7 @@ First, add Testcontainers as a dependency as follows:
 Simply add the following to the body of our test class:
 
 <!--codeinclude-->
-[JUnit 4 Rule](example/src/test/java/quickstart/RedisBackedCacheIntTest.java) inside_block:rule
+[JUnit 4 Rule](../example/src/test/java/quickstart/RedisBackedCacheIntTest.java) inside_block:rule
 <!--/codeinclude-->
 
 The `@Rule` annotation tells JUnit to notify this field about various events in the test lifecycle.
@@ -54,7 +54,7 @@ Testcontainers uses *randomized ports* for each container it starts, but makes i
 We can do this in our test `setUp` method, to set up our component under test:
 
 <!--codeinclude-->
-[Obtaining a mapped port](example/src/test/java/quickstart/RedisBackedCacheIntTest.java) inside_block:setUp
+[Obtaining a mapped port](../example/src/test/java/quickstart/RedisBackedCacheIntTest.java) inside_block:setUp
 <!--/codeinclude-->
 
 ## 4. Run the tests!
@@ -64,7 +64,7 @@ That's it!
 Let's look at our complete test class to see how little we had to add to get up and running with Testcontainers:
 
 <!--codeinclude-->
-[RedisBackedCacheIntTest](example/src/test/java/quickstart/RedisBackedCacheIntTest.java) block:RedisBackedCacheIntTest
+[RedisBackedCacheIntTest](../example/src/test/java/quickstart/RedisBackedCacheIntTest.java) block:RedisBackedCacheIntTest
 <!--/codeinclude-->
 
 ## Further reading

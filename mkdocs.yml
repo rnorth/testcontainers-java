@@ -1,4 +1,4 @@
-site_name: My Docs
+site_name: Testcontainers
 plugins:
 - search
 - codeinclude
@@ -10,3 +10,29 @@ markdown_extensions:
     linenums: False
 - pymdownx.superfences
 - pymdownx.snippets
+pages:
+- Home: index.md
+- Quickstart:
+  - quickstart/junit_4_quickstart.md
+- Features:
+  - features/networking.md
+  - features/commands.md
+  - features/files.md
+  - features/startup_and_waits.md
+- Modules:
+  - Databases:
+    - modules/databases/index.md
+    - modules/databases/mysql.md
+    - modules/databases/postgres.md
+- Test framework integration:
+  - test_framework_integration/junit_4.md
+  - test_framework_integration/junit_5.md
+  - test_framework_integration/spock.md
+- System Requirements:
+  - supported_docker_environment/index.md
+  - Continuous Integration:
+    - supported_docker_environment/continuous_integration/patterns.md
+    - supported_docker_environment/continuous_integration/circle_ci.md
+    - supported_docker_environment/continuous_integration/drone.md
+    - supported_docker_environment/continuous_integration/travis.md
+- Getting help: getting_help.md
