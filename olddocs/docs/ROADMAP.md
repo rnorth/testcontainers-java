@@ -1,6 +1,3 @@
-# Roadmap
-
-## Principles for the project
 
 Exact future features aren't set in stone, but here are the principles we should follow for this project:
 

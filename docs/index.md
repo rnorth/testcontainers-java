@@ -7,6 +7,14 @@
 
 ![Testcontainers logo](https://rnorth.org/public/testcontainers/logo.png)
 
+### Prerequisites
+
+Docker or docker-machine (for OS X) must be installed on the machine you are running tests on. Testcontainers currently requires JDK 1.8 and is compatible with JUnit.
+
+If you want to use Testcontainers on Windows you can try the [alpha release](usage/windows_support.md).
+
+
+
 ## Use Cases
 
 Testcontainers makes it easy to launch useful Docker containers for the duration of JUnit tests.
@@ -34,14 +42,59 @@ Testcontainers makes it easy to launch useful Docker containers for the duration
  * [Skyscanner](https://www.skyscanner.net/) - Integration testing against HTTP service mocks and various data stores
  * [Neo4j-OGM](https://neo4j.com/developer/neo4j-ogm/) - Testing new, reactive client implementations
 
-## Getting help
+## Maven dependencies
 
-You can:
+Testcontainers is distributed in a handful of Maven modules:
 
-* Join our Slack: http://slack.testcontainers.org
-* [Search our issues tracker](https://github.com/testcontainers/testcontainers-java/issues), or raise a new issue if you find any bugs or have suggested improvements
+* **testcontainers** for just core functionality, generic containers and docker-compose support
+* **mysql**, **postgresql** or **oracle-xe** for database container support
+* **selenium** for selenium/webdriver support
+* **nginx** for nginx container support
 
-## License
+In the dependency description below, replace `--artifact name--` as appropriate and `--latest version--` with the [latest version available on Maven Central](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.testcontainers%22):
+
+```
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>--artifact name--</artifactId>
+    <version>--latest version--</version>
+</dependency>
+```
+
+### JitPack (unreleased versions)
+
+Alternatively, if you like to live on the bleeding edge, jitpack.io can be used to obtain SNAPSHOT versions.
+Use the following dependency description instead:
+
+```
+<dependency>
+    <groupId>com.github.testcontainers.testcontainers-java</groupId>
+    <artifactId>--artifact name--</artifactId>
+    <version>-SNAPSHOT</version>
+</dependency>
+```
+
+A specific git revision (such as `093a3a4628`) can be used as a fixed version instead. The JitPack maven repository must also be declared, e.g.:
+
+```
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+	
+The [testcontainers examples project](https://github.com/testcontainers/testcontainers-java-examples) uses JitPack to fetch the latest, master version.
+
+### Shaded dependencies
+
+**Note**: Testcontainers uses the docker-java client library, which in turn depends on JAX-RS, Jersey and Jackson
+libraries. These libraries in particular seem to be especially prone to conflicts with test code/applciation under test
+ code. As such, **these libraries are 'shaded' into the core testcontainers JAR** and relocated
+ under `org.testcontainers.shaded` to prevent class conflicts.
+
+ ## License
 
 See [LICENSE](https://raw.githubusercontent.com/testcontainers/testcontainers-java/master/LICENSE).
 
@@ -53,7 +106,16 @@ This project was initially inspired by a [gist](https://gist.github.com/mosheesh
 
 ## Contributing
 
-See [CONTRIBUTING](https://github.com/testcontainers/testcontainers-java/blob/master/CONTRIBUTING.md).
+* Star the project on [Github](https://github.com/testcontainers/testcontainers-java) and help spread the word :)
+* Join our Slack: http://slack.testcontainers.org
+* See [ROADMAP](ROADMAP.md) to understand the approach behind the project and what may/may not be in store for the future.
+* [Post an issue](https://github.com/testcontainers/testcontainers-java/issues) if you find any bugs
+* Contribute improvements or fixes using a [Pull Request](https://github.com/testcontainers/testcontainers-java/pulls). If you're going to contribute, thank you! Please just be sure to:
+	* discuss with the authors on an issue ticket prior to doing anything big
+	* follow the style, naming and structure conventions of the rest of the project
+	* make commits atomic and easy to merge
+	* verify all tests are passing. Build the project with `./gradlew check` to do this.
+	**N.B.** Gradle's Build Cache is enabled by default, but you can add `--no-build-cache` flag to disable it.
 
 ## Copyright
 

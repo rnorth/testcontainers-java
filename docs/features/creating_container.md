@@ -1,6 +1,6 @@
-# Generic containers
+# Creating a container
 
-## Benefits
+## Creating a generic container based on an image
 
 Testcontainers' generic container support offers the most flexibility, and makes it easy to use virtually any container
 images as temporary test dependencies. For example, if you might use it to test interactions with:
@@ -10,7 +10,7 @@ images as temporary test dependencies. For example, if you might use it to test 
 * Log services (e.g. logstash, kibana)
 * Other services developed by your team/organization which are already dockerized
 
-## Example
+### Example
 
 A generic container rule can be used with any public docker image; for example:
 ```java
@@ -36,14 +36,9 @@ public static GenericContainer alpine =
 These containers, as `@ClassRule`s, will be started before any tests in the class run, and will be destroyed after all
 tests have run.
 
-## Accessing a container from tests
 
-The class rule provides methods for discovering how your tests can interact with the containers:
-
-* `getContainerIpAddress()` returns the IP address where the container is listening
-* `getMappedPort(...)` returns the Docker mapped port for a port that has been exposed on the container
-
-For example, with the Redis example above, the following will allow your tests to access the Redis service:
+With a generic container, you set the container image using a parameter to the rule constructor, e.g.:
 ```java
-String redisUrl = redis.getContainerIpAddress() + ":" + redis.getMappedPort(6379);
+new GenericContainer("jboss/wildfly:9.0.1.Final")
 ```
+

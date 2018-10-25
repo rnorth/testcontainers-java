@@ -1,6 +1,6 @@
-# Dockerfile containers
+# Creating images on-the-fly
 
-## Benefits
+## Overview
 
 In situations where there is no pre-existing Docker image, Testcontainers can create a new temporary image on-the-fly
 from a Dockerfile. For example, when the component under test is the Docker image itself, or when an existing base
