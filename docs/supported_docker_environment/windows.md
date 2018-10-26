@@ -17,7 +17,7 @@ If you wish to use Testcontainers on Windows, please confirm that it works corre
 effort.
 
 ### MySQL containers
-* MySQL server prevents custom configuration file (ini-script) from being loaded due to security measures ([link to feature description](database_containers.md#using-an-init-script))
+* MySQL server prevents custom configuration file (ini-script) from being loaded due to security measures ([link to feature description](../modules/databases/index.md#using-an-init-script))
 
 ### Windows Container on Windows (WCOW)
 

@@ -25,6 +25,7 @@ nav:
   - features/configuration.md
   - features/advanced_options.md
 - Modules:
+  - modules/index.md
   - Databases:
     - modules/databases/index.md
     - modules/databases/mysql.md
@@ -44,6 +45,7 @@ nav:
   - modules/localstack.md
   - modules/mockserver.md
   - modules/nginx.md
+  - modules/vault.md
 - Test framework integration:
   - test_framework_integration/junit_4.md
   - test_framework_integration/junit_5.md
@@ -51,8 +53,11 @@ nav:
 - System Requirements:
   - supported_docker_environment/index.md
   - Continuous Integration:
-    - supported_docker_environment/continuous_integration/patterns.md
+    - supported_docker_environment/continuous_integration/dind_patterns.md
     - supported_docker_environment/continuous_integration/circle_ci.md
     - supported_docker_environment/continuous_integration/drone.md
     - supported_docker_environment/continuous_integration/travis.md
+    - supported_docker_environment/continuous_integration/gitlab_ci.md
+  - supported_docker_environment/windows.md
+  - supported_docker_environment/logging_config.md
 - Getting help: getting_help.md

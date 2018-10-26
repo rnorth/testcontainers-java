@@ -1,19 +1,18 @@
-# General CI patterns
+# Patterns for running tests inside a Docker container
 
-## Docker daemon on the host
 
 ## Docker-in-Docker
 
 
 
-## Sibling docker containers / 'Docker wormhole' pattern
+## 'Docker wormhole' pattern - Sibling docker containers
 
 Testcontainers itself can be used from inside a container.
 This is very useful for different CI scenarios like running everything in containers on Jenkins, or Docker-based CI tools such as Drone.
 
 Testcontainers will automatically detect if it's inside a container and instead of "localhost" will use the default gateway's IP.
 
-However, additional configuration is required if you use [volume mapping](options.md#volume-mapping). The following points need to be considered:
+However, additional configuration is required if you use [volume mapping](../../features/files.md). The following points need to be considered:
 
 * The docker socket must be available via a volume mount
 * The 'local' source code directory must be volume mounted *at the same path* inside the container that Testcontainers runs in, so that Testcontainers is able to set up the correct volume mounts for the containers it spawns.
