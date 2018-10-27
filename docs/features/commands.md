@@ -1,26 +1,26 @@
-# Commands and executions
+# Executing commands
 
 ## Container startup command
 
-By default the container will execute whatever command is specified in the image's Dockerfile. To override this, and specify a different command, use `withCommand`:
-```java
-new GenericContainer(...)
-        .withCommand("/app/start.sh")
-```
+By default the container will execute whatever command is specified in the image's Dockerfile. To override this, and specify a different command, use `withCommand`. For example:
 
+<!--codeinclude-->
+[Specifying a startup command](../example/src/test/java/generic/CommandsTest.java) inside_block:startupCommand
+<!--/codeinclude-->
 
 ## Executing a command
 
 Your test can execute a command inside a running container, similar to a `docker exec` call:
-```java
-myContainer.execInContainer("touch", "/tmp/foo");
-```
+
+<!--codeinclude-->
+[Executing a command inside a running container](../example/src/test/java/generic/ExecTest.java) inside_block:standaloneExec
+<!--/codeinclude-->
 
 This can be useful for software that has a command line administration tool. You can also get the output from the command:
-```java
-ExecResult result = myContainer.execInContainer("tail", "-1", "/var/logs/foo");
-assertThat(result.getStdout().contains("message"));
-```
+
+<!--codeinclude-->
+[Executing a command inside a running container](../example/src/test/java/generic/ExecTest.java) inside_block:execReadingStdout
+<!--/codeinclude-->
 
 There are two limitations:
 * There's no way to get the return code of the executed command
