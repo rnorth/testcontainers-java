@@ -55,3 +55,7 @@ out/
 **/.settings
 **/bin/
 **/out/
+
+# Generated docs
+site/
+.DS_Store
