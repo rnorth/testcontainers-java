@@ -5,7 +5,7 @@ plugins:
 theme:
   name: 'material'
   palette:
-    primary: 'blue grey'
+    primary: 'blue'
     accent: 'teal'
   font: false
 extra_css:

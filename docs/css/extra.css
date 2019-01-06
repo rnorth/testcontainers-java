@@ -1,9 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Inconsolata|Open+Sans');
-
-@import url('https://fonts.googleapis.com/css?family=Inconsolata|Merriweather+Sans|Open+Sans');
-
+@import url('https://fonts.googleapis.com/css?family=Inconsolata|Lato|Merriweather+Sans|Open+Sans|Source+Sans+Pro');
 body {
-    font-family: 'Merriweather Sans', sans-serif;
+    font-family: 'Lato', sans-serif;
 
 }
 
