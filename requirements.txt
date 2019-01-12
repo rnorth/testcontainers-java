@@ -1,0 +1,2 @@
+mkdocs
+-e git+https://github.com/rnorth/mkdocs-codeinclude-plugin#egg=mkdocs-codeinclude-plugin
