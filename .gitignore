@@ -58,4 +58,5 @@ out/
 
 # Generated docs
 site/
-.DS_Store.direnv/
+.DS_Store
+.direnv/

@@ -8,6 +8,8 @@ theme:
     primary: 'blue'
     accent: 'teal'
   font: false
+  logo: 'logo.svg'
+  favicon: 'favicon.ico'
 extra_css:
   - 'css/extra.css'
 repo_name: 'testcontainers-java'
