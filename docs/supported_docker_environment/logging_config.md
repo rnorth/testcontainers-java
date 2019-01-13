@@ -1,5 +1,7 @@
 # Recommended logback configuration
 
+> TODO convert examples
+
 Testcontainers, and many of the libraries it uses, utilize slf4j for logging. In order to see logs from Testcontainers,
 your project should include an SLF4J implementation (Logback is recommended). The following example `logback-test.xml`
 should be included in your classpath to show a reasonable level of log output:

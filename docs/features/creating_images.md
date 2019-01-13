@@ -14,6 +14,8 @@ Testcontainers will `docker build` a temporary container image, and will use it 
 
 ### Dockerfile from String, file or classpath resource
 
+> TODO convert examples
+
 `ImageFromDockerfile` accepts arbitrary files, strings or classpath resources to be used as files in the build context.
 At least one of these needs to be a `Dockerfile`.
 ```java
@@ -33,6 +35,8 @@ The following methods may be used to provide the `Dockerfile` and any other requ
 * `withFileFromFile(buildContextPath, filesystemFile)`
 
 ### Dockerfile DSL
+
+> TODO convert examples
 
 If a static Dockerfile is not sufficient (e.g. your test needs to cover many variations that are best generated
 programmatically), there is a DSL available to allow Dockerfiles to be defined in code. e.g.:

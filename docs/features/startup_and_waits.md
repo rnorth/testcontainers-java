@@ -2,6 +2,8 @@
 
 ## Wait strategies vs Startup strategies
 
+> TODO draft content
+
 ## Wait Strategies
 
 Ordinarily Testcontainers will wait for up to 60 seconds for the container's first mapped network port to start listening.
@@ -14,6 +16,8 @@ If waiting for a listening TCP port is not sufficient to establish whether the c
 `waitingFor()` method with other `WaitStrategy` implementations as shown below.
 
 #### Waiting for startup examples
+
+> TODO convert examples
 
 You can choose to wait for an HTTP(S) endpoint to return a particular status code.
 
@@ -64,3 +68,5 @@ meet your requirements, you can create your own subclass of `AbstractWaitStrateg
 mechanism in `waitUntilReady()`. The `GenericContainer.waitingFor()` method accepts any valid `WaitStrategy`.
 
 ## Startup Strategies
+
+> TODO draft content

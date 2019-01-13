@@ -35,8 +35,16 @@ There is also a `getFirstMappedPort` method for convenience, for the fairly comm
 
 ## Getting the container IP address
 
+> TODO draft content
+
 ## Exposing host ports to the container
+
+> TODO draft content
 
 ## Exposing containers to other containers
 
+> TODO draft content
+
 ## Networks
+
+> TODO draft content

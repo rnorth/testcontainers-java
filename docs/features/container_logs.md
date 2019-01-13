@@ -1,5 +1,7 @@
 # Accessing container logs
 
+> TODO convert examples
+
 
 It is possible to capture container output using the `followOutput()` method. This method accepts a Consumer and (optionally)
 a varargs list stating which of STDOUT, STDERR, or both, should be followed. If not specified, both will be followed.

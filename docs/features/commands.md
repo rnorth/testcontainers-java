@@ -29,6 +29,8 @@ There are two limitations:
 
 ## Environment variables
 
+> TODO convert examples
+
 To add environment variables to the container, use `withEnv`:
 ```java
 new GenericContainer(...)
