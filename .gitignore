@@ -58,5 +58,8 @@ out/
 
 # Generated docs
 site/
-.DS_Store
 .direnv/
+src/mkdocs-codeinclude-plugin
+src/pip-delete-this-directory.txt
+
+.DS_Store
