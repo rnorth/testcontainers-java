@@ -9,8 +9,6 @@
 
 ## Wait Strategies
 
-> TODO convert examples
-
 Ordinarily Testcontainers will wait for up to 60 seconds for the container's first mapped network port to start listening.
 
 This simple measure provides a basic check whether a container is ready for use.
@@ -28,28 +26,48 @@ If waiting for a listening TCP port is not sufficient to establish whether the c
 
 You can choose to wait for an HTTP(S) endpoint to return a particular status code.
 
+#### Waiting for 200 OK
 <!--codeinclude--> 
-[Waiting for 200 OK](../example/src/test/java/generic/WaitStrategiesTest.java) inside_block:waitForSimpleHttp
+[](../example/src/test/java/generic/WaitStrategiesTest.java) inside_block:waitForSimpleHttp
 <!--/codeinclude-->
 
 Variations on the HTTP wait strategy are supported, including:
 
+#### Waiting for multiple possible status codes
 <!--codeinclude--> 
-[Waiting for multiple possible status codes](../example/src/test/java/generic/WaitStrategiesTest.java) inside_block:waitForHttpWithMultipleStatusCodes
-[Waiting for a status code that matches a predicate](../example/src/test/java/generic/WaitStrategiesTest.java) inside_block:waitForHttpWithStatusCodePredicate
-[Using TLS](../example/src/test/java/generic/WaitStrategiesTest.java) inside_block:waitForHttpWithTls
+[](../example/src/test/java/generic/WaitStrategiesTest.java) inside_block:waitForHttpWithMultipleStatusCodes
 <!--/codeinclude-->
 
+#### Waiting for a status code that matches a predicate
+<!--codeinclude--> 
+[Waiting for a status code that matches a predicate](../example/src/test/java/generic/WaitStrategiesTest.java) inside_block:waitForHttpWithStatusCodePredicate
+<!--/codeinclude-->
+
+#### Using TLS
+<!--codeinclude--> 
+[](../example/src/test/java/generic/WaitStrategiesTest.java) inside_block:waitForHttpWithTls
+<!--/codeinclude-->
+
+### Healthcheck Wait strategy examples
 
 If the used image supports Docker's [Healthcheck](https://docs.docker.com/engine/reference/builder/#healthcheck) feature, you can directly leverage the `healthy` state of the container as your wait condition:
-```java
-@ClassRule
-public static GenericContainer container =
-    new GenericContainer("image-with-healthcheck:4.2")
-               .waitingFor(Wait.forHealthcheck());
-```
 
-For futher options, check out the `Wait` convenience class, or the various subclasses of `WaitStrategy`. If none of these options
+<!--codeinclude-->
+[](../example/src/test/java/generic/WaitStrategiesTest.java) inside_block:healthcheckWait
+<!--/codeinclude-->
+
+### Log output Wait Strategy
+
+In some situations a container's log output is a simple way to determine if it is ready or not.
+For example, we can wait for a `Ready' message in the container's logs as follows:
+
+<!--codeinclude-->
+[](../example/src/test/java/generic/WaitStrategiesTest.java) inside_block:logMessageWait
+<!--/codeinclude-->
+
+### Other Wait Strategies
+
+For further options, check out the `Wait` convenience class, or the various subclasses of `WaitStrategy`. If none of these options
 meet your requirements, you can create your own subclass of `AbstractWaitStrategy` with an appropriate wait
 mechanism in `waitUntilReady()`. The `GenericContainer.waitingFor()` method accepts any valid `WaitStrategy`.
 
