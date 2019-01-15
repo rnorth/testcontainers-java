@@ -49,8 +49,10 @@ nav:
                 - modules/databases/clickhouse.md
                 - modules/databases/influxdb.md
                 - modules/databases/dynalite.md
+                - modules/databases/neo4j.md
           - modules/webdriver_containers.md
           - modules/docker_compose.md
+          - modules/elasticsearch.md
           - modules/kafka.md
           - modules/pulsar.md
           - modules/localstack.md
