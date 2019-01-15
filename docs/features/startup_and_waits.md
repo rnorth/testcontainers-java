@@ -20,7 +20,7 @@ This simple measure provides a basic check whether a container is ready for use.
 If the default 60s timeout is not sufficient, it can be altered with the `withStartupTimeout()` method.
 
 If waiting for a listening TCP port is not sufficient to establish whether the container is ready, you can use the
-`waitingFor()` method with other `WaitStrategy` implementations as shown below.
+`waitingFor()` method with other [`WaitStrategy`](http://static.javadoc.io/org.testcontainers/testcontainers/{{ latest_version }}/org/testcontainers/containers/wait/strategy/WaitStrategy.html) implementations as shown below.
 
 ### HTTP Wait strategy examples
 
@@ -67,9 +67,12 @@ For example, we can wait for a `Ready' message in the container's logs as follow
 
 ### Other Wait Strategies
 
-For further options, check out the `Wait` convenience class, or the various subclasses of `WaitStrategy`. If none of these options
-meet your requirements, you can create your own subclass of `AbstractWaitStrategy` with an appropriate wait
-mechanism in `waitUntilReady()`. The `GenericContainer.waitingFor()` method accepts any valid `WaitStrategy`.
+For further options, check out the [`Wait`](http://static.javadoc.io/org.testcontainers/testcontainers/{{ latest_version }}/org/testcontainers/containers/wait/strategy/Wait.html) convenience class, or the various subclasses of [`WaitStrategy`](http://static.javadoc.io/org.testcontainers/testcontainers/{{ latest_version }}/org/testcontainers/containers/wait/strategy/WaitStrategy.html). 
+
+If none of these options meet your requirements, you can create your own subclass of 
+[`AbstractWaitStrategy`](http://static.javadoc.io/org.testcontainers/testcontainers/{{ latest_version }}/org/testcontainers/containers/wait/strategy/AbstractWaitStrategy.html) with an 
+appropriate wait mechanism in `waitUntilReady()`. 
+The `GenericContainer.waitingFor()` method accepts any valid [`WaitStrategy`](http://static.javadoc.io/org.testcontainers/testcontainers/{{ latest_version }}/org/testcontainers/containers/wait/strategy/WaitStrategy.html).
 
 ## Startup Strategies
 
