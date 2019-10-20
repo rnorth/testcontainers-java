@@ -1,6 +1,9 @@
-name: Java CI
+name: Gradle Release
 
-on: [push]
+on:
+  push:
+    tags:
+    - '*'
 
 jobs:
   build:
@@ -13,5 +16,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    - name: Set env
+      run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew -Pversion=$RELEASE_VERSION release -x test --scan --no-daemon -i
