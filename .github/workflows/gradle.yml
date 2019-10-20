@@ -21,4 +21,4 @@ jobs:
     - name: Set env
       run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
     - name: Build with Gradle
-      run: ./gradlew -Pversion=$RELEASE_VERSION release -x test --scan --no-daemon -i
+      run: ./gradlew -Pversion=$RELEASE_VERSION release --scan --no-daemon -i
