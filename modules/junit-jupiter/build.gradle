@@ -12,7 +12,7 @@ dependencies {
     testCompile ('org.mockito:mockito-core:3.5.15') {
         exclude(module: 'hamcrest-core')
     }
-    testCompile 'org.assertj:assertj-core:$assertJVersion'
+    testCompile "org.assertj:assertj-core:$assertJVersion"
     testCompile 'org.junit.jupiter:junit-jupiter-params:5.7.0'
 
     testRuntime 'org.postgresql:postgresql:42.2.18'
