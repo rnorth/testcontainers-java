@@ -3,5 +3,5 @@ description = "Testcontainers :: Database-Commons"
 dependencies {
     compile project(':testcontainers')
 
-    testCompile "org.assertj:assertj-core:$assertJVersion"
+    testCompile "org.assertj:assertj-core:$assertj_version"
 }

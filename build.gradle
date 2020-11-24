@@ -1,5 +1,5 @@
 buildscript {
-    ext.assertJVersion = "3.18.0"
+    ext.assertj_version = "3.18.0"
 }
 
 plugins {
