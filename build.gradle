@@ -127,9 +127,7 @@ subprojects {
         }
     }
 
-    ext {
-        assertJVersion = "3.18.0"
-    }
+    ext.assertJVersion = "3.18.0"
 
     dependencies {
         testCompile 'ch.qos.logback:logback-classic:1.2.3'
