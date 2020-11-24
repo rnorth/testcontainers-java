@@ -1,3 +1,7 @@
+buildscript {
+    ext.assertJVersion = "3.18.0"
+}
+
 plugins {
     id 'io.franzbecker.gradle-lombok' version '3.1.0'
     id 'nebula.provided-base' version '3.0.3'
@@ -126,8 +130,6 @@ subprojects {
             }
         }
     }
-
-    ext.assertJVersion = "3.18.0"
 
     dependencies {
         testCompile 'ch.qos.logback:logback-classic:1.2.3'
