@@ -128,7 +128,7 @@ subprojects {
     }
 
     ext {
-        assertj_version = "3.18.0"
+        assertj_version = "3.19.0"
     }
 
     dependencies {
